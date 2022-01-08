@@ -1,0 +1,58 @@
+{% extends "mainapp/base.html" %}
+{% load static %}
+{% load project_tags %}
+{% block title %}{{ title|title }}{% endblock %}
+{% block content %}
+
+<div class="text-center" id="sorting_filter">
+    {% include 'mainapp/includes/inc__sorting_filter.html' %}
+</div>
+<div class="article-box">
+    <div class="details">
+        <div class="related">
+            <div class="related-articles">
+                {% if object_list %}
+                {% for article in object_list %}
+                <div class="block-article">
+                    <p><a href="{% url 'profile:user' article.author.pk %}">
+                            <span class="font-weight-bold"><img class="mr-2"
+                                                                src="{{ article.author.avatar|media_folder_users }}"
+                                                                alt="profile_image" height="24">
+                                <button type="button" class="btn btn-warning">{{article.author.rating_author|floatformat:2}}</button>
+                                {{ article.author }}
+                            </span></a>
+                        <span class="font-weight-light">
+                                        {{ article.add_datetime }}
+                                    </span>
+                    </p>
+                    <a class="a_link_article" href="{% url 'article_page' article.pk %}">
+                        <h4 class="text-center">{{ article.name }}</h4>
+                    </a>
+                    <img class="img-thumbnail article-img" src="{{ article.image|media_folder_article }}" alt="">
+                    <div class="articles-text">
+                        <p>
+                            {{ article.preview }}
+                        </p>
+                        <div class="box-btn-read">
+                            <a class="btn-read-article" href="{% url 'article_page' article.pk %}">
+                                Читать полностью
+                            </a>
+                        </div>
+                        <hr>
+                        <p>#{{ article.tag }}</p>
+                        <div style="padding-bottom:10px">{{ article.hub }}</div>
+                        {% include 'mainapp/includes/inc__activity.html' %}
+                    </div>
+                </div>
+                {% endfor %}
+                {% else %}
+                <p>Нет опубликованных статей</p>#}
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+<div class=data_articles></div>
+<script src="{% static 'js/infinite_scroll.js' %}"></script>
+
+{% endblock %}

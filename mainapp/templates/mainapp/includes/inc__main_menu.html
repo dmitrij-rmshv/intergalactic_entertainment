@@ -1,0 +1,135 @@
+{% load static %}
+<div class="sticky-top">
+    <nav class="navbar navbar-expand-lg navbar-light {% if request.user.is_authenticated %}username{% endif %} ">
+        <a class="navbar-brand" href="{% url 'main' %}">
+            <img src="{% static 'img/logo.png' %}" width="40" height="40" class="d-inline-block align-top" alt="">
+        </a>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'main' %}">Главная</a>
+                </li>
+
+                           <li class="nav-item">
+                <!--                <form class="form-inline my-2 my-lg-0">-->
+                <!--                    <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">-->
+                <!--                    <button class="btn btn-outline-success" type="submit">Search</button>-->
+                <!--                </form>-->
+                               {% include 'mainapp/includes/inc__search.html' %}
+                           </li>
+            </ul>
+            {% if user.is_superuser %}
+                <div class="user-panel admin-moder-panel">
+                    <div class="menu-icon-box margin1">
+                        <a id="menu-icon" href="{% url 'adminapp:users' %}">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-people-fill" viewBox="0 0 16 16">
+                              <path d="M7 14s-1 0-1-1 1-4 5-4 5 3 5 4-1 1-1 1H7zm4-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>
+                              <path fill-rule="evenodd" d="M5.216 14A2.238 2.238 0 0 1 5 13c0-1.355.68-2.75 1.936-3.72A6.325 6.325 0 0 0 5 9c-4 0-5 3-5 4s1 1 1 1h4.216z"/>
+                              <path d="M4.5 8a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5z"/>
+                            </svg>
+                            {% if transactions_not_read_count %}
+                                <span class="badge transaction-icon">{{ transactions_not_read_count }}</span>
+                            {% endif %}
+                        </a>
+
+                    </div>
+                    <div class="menu-icon-box">
+                        <a id="menu-icon" href="{% url 'moderation:main' %}">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-clipboard-check" viewBox="0 0 16 16">
+                              <path fill-rule="evenodd" d="M10.854 7.146a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 1 1 .708-.708L7.5 9.793l2.646-2.647a.5.5 0 0 1 .708 0z"/>
+                              <path d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1h1a1 1 0 0 1 1 1V14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1h1v-1z"/>
+                              <path d="M9.5 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5h3zm-3-1A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3z"/>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+            {% elif user.is_staff %}
+                <div class="user-panel admin-moder-panel">
+                    <div class="menu-icon-box">
+                        <a id="menu-icon" href="{% url 'moderation:main' %}">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-clipboard-check" viewBox="0 0 16 16">
+                              <path fill-rule="evenodd" d="M10.854 7.146a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 1 1 .708-.708L7.5 9.793l2.646-2.647a.5.5 0 0 1 .708 0z"/>
+                              <path d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1h1a1 1 0 0 1 1 1V14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1h1v-1z"/>
+                              <path d="M9.5 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5h3zm-3-1A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3z"/>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+            {% endif %}
+            <div class="user-panel">
+                {% if user.is_authenticated %}
+                <!--            <button class="user-panel-button" href="#">-->
+                <!--                <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor"-->
+                <!--                     class="bi bi-people-fill" viewBox="0 0 16 16">-->
+                <!--                    <path d="M7 14s-1 0-1-1 1-4 5-4 5 3 5 4-1 1-1 1H7zm4-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>-->
+                <!--                    <path fill-rule="evenodd"-->
+                <!--                          d="M5.216 14A2.238 2.238 0 0 1 5 13c0-1.355.68-2.75 1.936-3.72A6.325 6.325 0 0 0 5 9c-4 0-5 3-5 4s1 1 1 1h4.216z"/>-->
+                <!--                    <path d="M4.5 8a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5z"/>-->
+                <!--                </svg>-->
+                <!--            </button>-->
+                <!--            <button class="user-panel-button" href="#">-->
+                <!--                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor"-->
+                <!--                     class="bi bi-bell-fill" viewBox="0 0 16 16">-->
+                <!--                    <path d="M8 16a2 2 0 0 0 2-2H6a2 2 0 0 0 2 2zm.995-14.901a1 1 0 1 0-1.99 0A5.002 5.002 0 0 0 3 6c0 1.098-.5 6-2 7h14c-1.5-1-2-5.902-2-7 0-2.42-1.72-4.44-4.005-4.901z"/>-->
+                <!--                </svg>-->
+                <!--            </button>-->
+                <a class="user-panel-button" title="Уведомления" href="{% url 'auth:notifications' %}">
+
+                    {% if notifications_not_read %}
+                        <div class="menu-icon-box">
+                            <svg id="menu-icon" xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-bell-fill" viewBox="0 0 16 16">
+                                <path d="M8 16a2 2 0 0 0 2-2H6a2 2 0 0 0 2 2zm.995-14.901a1 1 0 1 0-1.99 0A5.002 5.002 0 0 0 3 6c0 1.098-.5 6-2 7h14c-1.5-1-2-5.902-2-7 0-2.42-1.72-4.44-4.005-4.901z"/>
+                            </svg>
+                            {% if request.resolver_match.url_name == 'notifications' %}
+                            <span class="badge notification-icon">{{ notifications_not_read.count }}</span>
+                            {% else %}
+                            <span class="badge notification-icon">{{ notifications_not_read }}</span>
+                            {% endif %}
+                        </div>
+                    {% else %}
+                        <div class="menu-icon-box">
+                            <svg id="menu-icon"  xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-bell" viewBox="0 0 16 16">
+                                <path d="M8 16a2 2 0 0 0 2-2H6a2 2 0 0 0 2 2zM8 1.918l-.797.161A4.002 4.002 0 0 0 4 6c0 .628-.134 2.197-.459 3.742-.16.767-.376 1.566-.663 2.258h10.244c-.287-.692-.502-1.49-.663-2.258C12.134 8.197 12 6.628 12 6a4.002 4.002 0 0 0-3.203-3.92L8 1.917zM14.22 12c.223.447.481.801.78 1H1c.299-.199.557-.553.78-1C2.68 10.2 3 6.88 3 6c0-2.42 1.72-4.44 4.005-4.901a1 1 0 1 1 1.99 0A5.002 5.002 0 0 1 13 6c0 .88.32 4.2 1.22 6z"/>
+                            </svg>
+                        </div>
+                    {% endif %}
+                </a>
+                    <div class="menu-icon-box">
+                        <a id="menu-icon" class="user-panel-button" title="Личный кабинет" href="{% url 'profile:main' %}">
+                        <svg width="25" height="25" viewBox="0 0 16 16" class="bi bi-person-fill" fill="currentColor"
+                             xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd"
+                                  d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H3zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>
+                        </svg>
+                        {{ user.username }}
+                        </a>
+                    </div>
+                <a class="user-panel-button" href="{% url 'auth:logout' %}">
+                    Выход
+                </a>
+                {% else %}
+                <a class="user-panel-button" href="{% url 'auth:login' %}">
+                    Вход
+                </a>
+                <a class="user-panel-button" href="{% url 'auth:register' %}">
+                    Регистрация
+                </a>
+                {% endif %}
+            </div>
+        </div>
+    </nav>
+    <nav>
+    <div>
+        <ul class="menu_category nav-pills d-flex justify-content-center">
+            <li {% if request.resolver_match.url_name == "hub_category" and not request.resolver_match.kwargs.pk %} class="active" {% endif %}>
+            <a class="nav-link black" href="{% url 'hub_category' 0 %}">Все хабы</a>
+            </li>
+            {% for item in category_menu %}
+            <li {% if request.resolver_match.kwargs.pk == item.pk and "hub_category" == request.resolver_match.url_name  %} class="active" {% endif %}>
+            <a class="nav-link black" href="{% url 'hub_category' item.pk %}">{{ item.name }}</a>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+    </nav>
+</div>
